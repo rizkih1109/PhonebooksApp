@@ -1,0 +1,73 @@
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+
+export default function PhoneBar() {
+    return (
+        <View style={styles.titleContainer}>
+            <TouchableOpacity style={styles.button}>
+                <FontAwesome
+                    name="sort-alpha-asc"
+                    style={styles.fontButton}
+                />
+            </TouchableOpacity>
+            <View style={styles.searchContainer}>
+                <FontAwesome
+                    name="search"
+                    style={styles.search}
+                />
+                <TextInput
+                    style={styles.input}
+                />
+            </View>
+            <TouchableOpacity style={styles.button}>
+                <FontAwesome5
+                    name="user-plus"
+                    style={styles.fontButton}
+                />
+            </TouchableOpacity>
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    titleContainer: {
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'center',
+        marginBottom: 12
+    },
+    button: {
+        padding: 15,
+        backgroundColor: '#ad793e',
+        height: 40,
+        alignItems: 'center',
+        borderRadius: 4,
+        borderWidth: 0
+    },
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: 'black',
+        borderRadius: 4,
+        paddingHorizontal: 10,
+        height: 40,
+        width: '75%',
+        marginLeft: 10,
+        marginRight: 10
+    },
+    input: {
+        flex: 1,
+        paddingVertical: 8,
+    },
+    fontButton: {
+        fontSize: 10,
+        color: 'black'
+    },
+    search: {
+        marginRight: 10,
+        color: 'black',
+        fontSize: 15
+    },
+
+});
