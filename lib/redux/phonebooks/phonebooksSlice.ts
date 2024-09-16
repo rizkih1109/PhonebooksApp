@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { load } from './phonebooksApi'
+import { add, load } from './phonebooksApi'
 
 interface UserState {
   value: User[],
@@ -13,6 +13,14 @@ export const loadPhoneAsync = createAsyncThunk(
   async () => {
     const response = await load()
     return response.data
+  }
+)
+
+export const addPhoneAsync = createAsyncThunk<AddResponse, NewUser>(
+  'phonebooks/add',
+  async ({ id, name, phone }) => {
+    const response = await add(name, phone)
+    return { id, user: response.data }
   }
 )
 
@@ -34,6 +42,18 @@ export const phoneSlice = createSlice({
       .addCase(loadPhoneAsync.rejected, (state, action) => {
         state.status = 'idle'
         state.value = []
+      })
+      .addCase(addPhoneAsync.pending, state => {
+        state.status = 'loading'
+      })
+      .addCase(addPhoneAsync.fulfilled, (state, action) => {
+        state.status = 'idle'
+        console.log(action.payload.user)
+        state.value = [action.payload.user, ...state.value]
+      })
+      .addCase(addPhoneAsync.rejected, (state, action) => {
+        state.status = 'idle'
+        console.error('Failed to add user:', action.error.message);
       })
   }
 })
