@@ -1,7 +1,11 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 export default function PhoneBar() {
+
+    const navigation = useNavigation<addNavigate>();
+
     return (
         <View style={styles.titleContainer}>
             <TouchableOpacity style={styles.button}>
@@ -19,7 +23,10 @@ export default function PhoneBar() {
                     style={styles.input}
                 />
             </View>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigation.navigate('add')}
+            >
                 <FontAwesome5
                     name="user-plus"
                     style={styles.fontButton}

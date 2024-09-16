@@ -20,7 +20,6 @@ export default function PhoneList() {
                 data={users}
                 renderItem={({ item }) => <PhoneCard user={item} key={item.id} />}
             />
-
         </View>
     )
 }
