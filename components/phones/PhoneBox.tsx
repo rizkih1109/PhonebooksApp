@@ -1,12 +1,8 @@
 import PhoneBar from "@/components/phones/PhoneBar";
 import { StyleSheet, View } from "react-native";
-import { useState } from "react";
 import PhoneList from "./PhoneList";
 
 export default function PhoneBox() {
-    const [users, setUsers] = useState<User[]>([])
-
-
 
     return (
         <View style={styles.mainContainer}>
