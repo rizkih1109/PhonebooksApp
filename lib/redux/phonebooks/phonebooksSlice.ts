@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { add, edit, load, remove } from './phonebooksApi'
+import { add, avatar, edit, load, remove } from './phonebooksApi'
 
 interface UserState {
   value: User[],
@@ -26,9 +26,17 @@ export const addPhoneAsync = createAsyncThunk<FormResponse, NewUser>(
 
 export const editPhoneAsync = createAsyncThunk<FormResponse, NewUser>(
   'phonebooks/edit',
-  async ({id, name, phone}) => {
+  async ({ id, name, phone }) => {
     const response = await edit(id, name, phone)
-    return {id, user: response.data}
+    return { id, user: response.data }
+  }
+)
+
+export const avatarPhoneAsync = createAsyncThunk<FormResponse, Avatar>(
+  'phonebooks/avatar',
+  async ({id, file}) => {
+    const response = await avatar(id, file)
+    return {id, user: response.data} 
   }
 )
 
@@ -77,14 +85,24 @@ export const phoneSlice = createSlice({
         state.status = 'idle'
         state.value = state.value.map((item: User) => {
           if (item.id === action.payload.id) {
-            console.log(action.payload.user)
             item.name = action.payload.user.name
             item.phone = action.payload.user.phone
           }
           return item
-        }) 
+        })
       })
-
+      .addCase(avatarPhoneAsync.pending, state => {
+        state.status = 'loading'
+      })
+      .addCase(avatarPhoneAsync.fulfilled, (state, action) => {
+        state.status = 'idle'
+        state.value = state.value.map((item: User) => {
+          if (item.id === action.payload.id) {
+            item.avatar = action.payload.user.avatar
+          }
+          return item
+        })
+      })
       .addCase(removePhoneAsync.pending, state => {
         state.status = 'loading'
       })

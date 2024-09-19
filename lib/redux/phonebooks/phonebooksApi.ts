@@ -13,3 +13,9 @@ export const edit = (id: string, name: string, phone: string) => api.put(`phoneb
     name,
     phone
 })
+
+export const avatar = (id: string, file: FormData) => api.put(`phonebooks/${id}/avatar`, file, {
+    headers: {
+        'Content-Type': 'multipart/form-data'
+    }
+})
