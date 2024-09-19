@@ -1,17 +1,18 @@
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { editPhoneAsync } from "@/lib/redux/phonebooks/phonebooksSlice";
+import { avatarPhoneAsync, editPhoneAsync } from "@/lib/redux/phonebooks/phonebooksSlice";
 import { AppDispatch } from "@/lib/redux/store";
+import * as ImagePicker from 'expo-image-picker'
 
 export default function PhoneCard({ user }: { user: User }) {
 
     const navigation = useNavigation<modalNavigate>()
     const dispatch = useDispatch<AppDispatch>()
-    const [newData, setNewData] = useState({id: user.id, name: user.name, phone: user.phone})
+    const [newData, setNewData] = useState({ id: user.id, name: user.name, phone: user.phone })
     const [isEdit, setIsEdit] = useState(false)
 
     const save = () => {
@@ -19,12 +20,74 @@ export default function PhoneCard({ user }: { user: User }) {
         setIsEdit(false)
     }
 
+    const image = async () => {
+
+        const media = await ImagePicker.requestMediaLibraryPermissionsAsync()
+        const camera = await ImagePicker.requestCameraPermissionsAsync()
+
+        if (media.granted == false || camera.granted == false) {
+            Alert.alert('Permission to access camera roll is required')
+            return
+        }
+
+        Alert.alert(
+            'Choose an Option',
+            'Select an option to upload your avatar',
+            [
+                { text: 'Camera', onPress: (() => fromCamera()) },
+                { text: 'Media', onPress: (() => fromMedia()) },
+                { text: 'Cancel', style: 'cancel' }
+            ]
+        )
+    }
+
+    const fromCamera = async () => {
+        const imageResult = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1
+        })
+
+        fixImage(imageResult)
+    }
+
+    const fromMedia = async () => {
+        const imageResult = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1
+        })
+
+        fixImage(imageResult)
+    }
+
+    const fixImage = async (imageResult: ImagePicker.ImagePickerResult) => {
+        if (!imageResult.canceled) {
+            const fileName = imageResult.assets[0].fileName;
+            const formData = new FormData()
+
+            formData.append('avatar', {
+                uri: imageResult.assets[0].uri,
+                name: fileName,
+                type: 'image/jpeg'
+            } as any)
+
+            dispatch(avatarPhoneAsync({ id: user.id, file: formData }))
+        }
+    }
+
     if (isEdit) {
         return (
             <View style={styles.editCard}>
                 <View>
                     <Image
-                        source={require('../../assets/images/Defaultavatar.png')}
+                        source={{
+                            uri: user.avatar == null
+                                ? 'http://localhost:3000/images/Defaultavatar.png'
+                                : `http://localhost:3000/images/${user.avatar}`,
+                        }}
                         style={styles.avatar}
                     />
                 </View>
@@ -33,12 +96,12 @@ export default function PhoneCard({ user }: { user: User }) {
                         <TextInput
                             style={styles.input}
                             value={newData.name}
-                            onChangeText={text => setNewData({...newData, name: text})}
+                            onChangeText={text => setNewData({ ...newData, name: text })}
                         />
                         <TextInput
                             style={styles.input}
                             value={newData.phone}
-                            onChangeText={text => setNewData({...newData, phone: text})}
+                            onChangeText={text => setNewData({ ...newData, phone: text })}
                         />
                     </View>
                     <View style={styles.editBtn} >
@@ -55,10 +118,16 @@ export default function PhoneCard({ user }: { user: User }) {
         return (
             <View style={styles.card}>
                 <View>
-                    <Image
-                        source={require('../../assets/images/Defaultavatar.png')}
-                        style={styles.avatar}
-                    />
+                    <TouchableOpacity onPress={image}>
+                        <Image
+                            source={{
+                                uri: user.avatar == null
+                                    ? 'http://localhost:3000/images/Defaultavatar.png'
+                                    : `http://localhost:3000/images/${user.avatar}`,
+                            }}
+                            style={styles.avatar}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.listData}>
                     <View>
@@ -110,7 +179,8 @@ const styles = StyleSheet.create({
     },
     avatar: {
         width: 110,
-        height: 112
+        height: 112,
+        borderRadius: 50
     },
     listData: {
         marginLeft: 20,
