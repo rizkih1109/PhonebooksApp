@@ -3,16 +3,18 @@ import { add, avatar, edit, load, remove } from './phonebooksApi'
 
 interface UserState {
   value: User[],
-  status: string
+  status: string,
+  keyword: string,
+  sort: string
 }
 
-const initialState = { value: [], status: 'idle' } satisfies UserState as UserState
+const initialState = { value: [], status: 'idle', keyword: '', sort: 'asc' } satisfies UserState as UserState
 
 export const loadPhoneAsync = createAsyncThunk(
   'phonebooks/load',
-  async () => {
-    const response = await load()
-    return response.data
+  async ({ keyword = '', sort= 'asc' }: { keyword?: string, sort?: string }) => {
+    const response = await load(keyword, sort)
+    return { data: response.data, keyword, sort }
   }
 )
 
@@ -34,9 +36,9 @@ export const editPhoneAsync = createAsyncThunk<FormResponse, NewUser>(
 
 export const avatarPhoneAsync = createAsyncThunk<FormResponse, Avatar>(
   'phonebooks/avatar',
-  async ({id, file}) => {
+  async ({ id, file }) => {
     const response = await avatar(id, file)
-    return {id, user: response.data} 
+    return { id, user: response.data }
   }
 )
 
@@ -59,7 +61,7 @@ export const phoneSlice = createSlice({
       })
       .addCase(loadPhoneAsync.fulfilled, (state, action) => {
         state.status = 'idle'
-        state.value = action.payload.Phonebooks.map((item: User) => {
+        state.value = action.payload.data.Phonebooks.map((item: User) => {
           return item
         })
       })
