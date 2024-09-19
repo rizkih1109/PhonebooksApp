@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FlatList, View } from "react-native";
 import PhoneCard from "./PhoneCard";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
 import { loadPhoneAsync } from "@/lib/redux/phonebooks/phonebooksSlice";
 
-export default function PhoneList() {
-    
+export default function PhoneList({keyword, sort} : PhoneListProps) {
+
     const dispatch: any = useDispatch()
     const users = useSelector((state: RootState) => state.users.value)
-    
+
     useEffect(() => {
-        dispatch(loadPhoneAsync())
-    }, [dispatch])
-    
+        dispatch(loadPhoneAsync({ keyword, sort }))
+    }, [dispatch, keyword, sort])
+
     return (
         <View>
             <FlatList

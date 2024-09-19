@@ -2,17 +2,25 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-export default function PhoneBar() {
+export default function PhoneBar({ keyword, setKeyword, sort, setSort }: PhoneBarProps) {
 
     const navigation = useNavigation<addNavigate>();
+    const sorting = () => {
+        const newSort = sort === 'asc' ? 'desc' : 'asc'
+        setSort(newSort)
+    }
 
     return (
         <View style={styles.titleContainer}>
-            <TouchableOpacity style={styles.button}>
-                <FontAwesome
-                    name="sort-alpha-asc"
+            <TouchableOpacity style={styles.button} onPress={sorting}>
+                {sort == 'asc' ? <FontAwesome
+                    name="sort-alpha-desc"
                     style={styles.fontButton}
-                />
+                /> :
+                    <FontAwesome
+                        name="sort-alpha-asc"
+                        style={styles.fontButton}
+                    />}
             </TouchableOpacity>
             <View style={styles.searchContainer}>
                 <FontAwesome
@@ -21,6 +29,8 @@ export default function PhoneBar() {
                 />
                 <TextInput
                     style={styles.input}
+                    value={keyword}
+                    onChangeText={setKeyword}
                 />
             </View>
             <TouchableOpacity

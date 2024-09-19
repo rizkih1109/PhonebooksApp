@@ -1,15 +1,19 @@
 import PhoneBar from "@/components/phones/PhoneBar";
 import { StyleSheet, View } from "react-native";
 import PhoneList from "./PhoneList";
+import { useState } from "react";
 
 export default function PhoneBox() {
+
+    const [keyword, setKeyword] = useState<string>('')
+    const [sort, setSort] = useState<string>('asc')
 
     return (
         <View style={styles.mainContainer}>
             <View>
-                <PhoneBar />
+                <PhoneBar keyword={keyword} setKeyword={setKeyword} sort={sort} setSort={setSort} />
             </View>
-                <PhoneList />
+                <PhoneList keyword={keyword} sort={sort} />
         </View>
     )
 }
