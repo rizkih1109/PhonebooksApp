@@ -1,7 +1,7 @@
 import { api } from "@/lib/api";
 
-export const load = (keyword: string, sort: string) => api.get('phonebooks', {
-    params: { keyword, sort }
+export const load = (keyword: string, sort: string, page: number, limit: number) => api.get('phonebooks', {
+    params: { keyword, sort, page, limit }
 })
 
 export const add = (name: string, phone: string) => api.post('phonebooks', {

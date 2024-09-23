@@ -13,14 +13,10 @@ export default function PhoneBar({ keyword, setKeyword, sort, setSort }: PhoneBa
     return (
         <View style={styles.titleContainer}>
             <TouchableOpacity style={styles.button} onPress={sorting}>
-                {sort == 'asc' ? <FontAwesome
-                    name="sort-alpha-desc"
+                <FontAwesome
+                    name={sort == 'asc' ? "sort-alpha-desc" : "sort-alpha-asc"}
                     style={styles.fontButton}
-                /> :
-                    <FontAwesome
-                        name="sort-alpha-asc"
-                        style={styles.fontButton}
-                    />}
+                />
             </TouchableOpacity>
             <View style={styles.searchContainer}>
                 <FontAwesome
