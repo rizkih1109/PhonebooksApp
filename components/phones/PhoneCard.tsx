@@ -85,8 +85,8 @@ export default function PhoneCard({ user }: { user: User }) {
                     <Image
                         source={{
                             uri: user.avatar == null
-                                ? 'http://192.168.1.7:3000/images/Defaultavatar.png'
-                                : `http://192.168.1.7:3000/images/${user.avatar}`,
+                                ? 'http://192.168.1.3:3000/images/Defaultavatar.png'
+                                : `http://192.168.1.3:3000/images/${user.avatar}`,
                         }}
                         style={styles.avatar}
                     />
@@ -122,8 +122,8 @@ export default function PhoneCard({ user }: { user: User }) {
                         <Image
                             source={{
                                 uri: user.avatar == null
-                                    ? 'http://192.168.1.7:3000/images/Defaultavatar.png'
-                                    : `http://192.168.1.7:3000/images/${user.avatar}`,
+                                    ? 'http://192.168.1.3:3000/images/Defaultavatar.png'
+                                    : `http://192.168.1.3:3000/images/${user.avatar}`,
                             }}
                             style={styles.avatar}
                         />

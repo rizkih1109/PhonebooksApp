@@ -17,6 +17,7 @@ export const loadPhoneAsync = createAsyncThunk(
   'phonebooks/load',
   async ({ keyword = '', sort = 'asc', page = 1, limit = 10 }: { keyword?: string, sort?: string, page?: number, limit?: number }) => {
     const response = await load(keyword, sort, page, limit)
+    console.log('berhasil masuk')
     return { data: response.data, keyword, sort, page, limit }
   }
 )

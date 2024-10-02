@@ -67,11 +67,12 @@ const styles = StyleSheet.create({
         height: 40,
         width: '75%',
         marginLeft: 10,
-        marginRight: 10
+        marginRight: 10,
+        backgroundColor: 'white'
     },
     input: {
         flex: 1,
-        paddingVertical: 8,
+        paddingVertical: 8
     },
     fontButton: {
         fontSize: 10,
